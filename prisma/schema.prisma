@@ -1,0 +1,74 @@
+generator client {
+  provider = "prisma-client"
+  output   = "../lib/generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model article {
+  id        Int       @id @default(autoincrement())
+  title     String?   @db.VarChar(50)
+  content   String?
+  summary   String?   @db.VarChar(1000)
+  userid    Int?
+  createdat DateTime? @default(now()) @db.Timestamptz(6)
+  updatedat DateTime? @default(now()) @db.Timestamptz(6)
+  users     users?    @relation(fields: [userid], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  quiz      quiz[]
+}
+
+model quiz {
+  id          Int           @id @default(autoincrement())
+  question    String?       @db.VarChar(200)
+  answer      String?       @db.VarChar(100)
+  articleid   Int?
+  createdat   DateTime?     @default(now()) @db.Timestamptz(6)
+  updatedat   DateTime?     @default(now()) @db.Timestamptz(6)
+  options     String[]
+  article     article?      @relation(fields: [articleid], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  quizattempt quizattempt[]
+  userscore   userscore[]
+}
+
+model quizattempt {
+  id        Int       @id @default(autoincrement())
+  quizid    Int?
+  userid    Int?
+  score     Int?
+  timespent Int?
+  createdat DateTime? @default(now()) @db.Timestamptz(6)
+  quiz      quiz?     @relation(fields: [quizid], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  users     users?    @relation(fields: [userid], references: [id], onDelete: NoAction, onUpdate: NoAction)
+}
+
+model students {
+  id     Int     @unique @default(autoincrement())
+  name   String? @db.VarChar(50)
+  age    Int?
+  gender String? @db.VarChar(50)
+}
+
+model users {
+  id          Int           @id @default(autoincrement())
+  clerkid     String?       @unique @db.VarChar(100)
+  email       String?       @unique @db.VarChar(50)
+  name        String?       @db.VarChar(100)
+  createdat   DateTime?     @default(now()) @db.Timestamptz(6)
+  updatedat   DateTime?     @default(now()) @db.Timestamptz(6)
+  article     article[]
+  quizattempt quizattempt[]
+  userscore   userscore[]
+}
+
+model userscore {
+  id        Int       @id @default(autoincrement())
+  quizid    Int?
+  userid    Int?
+  score     Int?
+  createdat DateTime? @default(now()) @db.Timestamptz(6)
+  quiz      quiz?     @relation(fields: [quizid], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  users     users?    @relation(fields: [userid], references: [id], onDelete: NoAction, onUpdate: NoAction)
+}
