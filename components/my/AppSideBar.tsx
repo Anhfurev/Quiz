@@ -30,8 +30,7 @@ export function AppSidebar() {
   }
   return (
     <Sidebar className=" bg-white border-none">
-      <SidebarHeader />
-      <SidebarContent className="p-4 pt-12 border-0 bg-white flex flex-col gap-1 ">
+      <SidebarContent className="p-4 pt-12 border-0 bg-white flex flex-col gap-1 mt-2 ">
         <h1 className="text-[20px] pt-2 font-bold text-black">History</h1>
         <div className="flex flex-col gap-2">
           {data?.map((x: any, i: any) => (

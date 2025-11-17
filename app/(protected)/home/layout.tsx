@@ -37,7 +37,7 @@ export default function RootLayout({
                 <SidebarTrigger />
               </div>
             </div>
-            <div className="bg-accent w-full h-full">{children}</div>
+            <div className="bg-accent w-[85vw] h-full">{children}</div>
           </main>
         </SidebarProvider>
       </div>
